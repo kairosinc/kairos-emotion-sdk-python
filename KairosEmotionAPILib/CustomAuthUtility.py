@@ -19,11 +19,8 @@ class CustomAuthUtility:
 		:type headers: dict
         '''
 
-        # TODO: Add your custom authentication here
-        # The following properties are available to use
-        #     Configuration.content_type
-        #     Configuration.app_id
-        #     Configuration.app_key
-        # 
-        # ie. Add a header through:
-        #     headers["key"] = "value"
+        headers["Content-Type"] = Configuration.content_type
+        headers["app_id"]       = Configuration.app_id
+        headers["app_key"]      = Configuration.app_key
+
+        return headers

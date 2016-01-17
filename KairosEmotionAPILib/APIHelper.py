@@ -168,7 +168,8 @@ class APIHelper:
         # Remove redundant forward slashes
         protocol = match.group(0)
         query_url = url[len(protocol):]
-        query_url = re.sub("//+", "/", query_url);
+        # commented out - this script removes one "/" from source URL
+        # query_url = re.sub("//+", "/", query_url);
 
         return protocol + query_url
         return query_url

@@ -6,9 +6,12 @@
    This file was automatically generated for kairos by APIMATIC BETA v2.0 on 01/15/2016
 """
 import unirest
+import signal
+import time
 
 from KairosEmotionAPILib.APIHelper import APIHelper
 from KairosEmotionAPILib.Configuration import Configuration
+from KairosEmotionAPILib.CustomAuthUtility import CustomAuthUtility
 from KairosEmotionAPILib.APIException import APIException
 from KairosEmotionAPILib.Models.MediaResponse import MediaResponse
 from KairosEmotionAPILib.Models.MediaByIdResponse import MediaByIdResponse
@@ -16,6 +19,18 @@ from KairosEmotionAPILib.Models.MediaByIdResponse import MediaByIdResponse
 
 class EmotionAnalysisController(object):
 
+    # set timeout for API processes
+    def timeout_handler(signum, frame):
+        raise NameError("Operation timed out")
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(Configuration.api_timeout)
+
+    # Prepare headers
+    global headers
+    headers = {
+        "user-agent": "APIMATIC 2.0",
+        "accept": "application/json"
+    }
 
     """A Controller to access Endpoints in the KairosEmotionAPILib API."""
 
@@ -53,30 +68,16 @@ class EmotionAnalysisController(object):
         # Validate and preprocess url
         query_url = APIHelper.clean_url(query_builder)
 
-        # Prepare headers
-        headers = {
-
-            "Content-Type": Configuration.content_type,            "user-agent": "APIMATIC 2.0",
-            "accept": "application/json"
-        }
-
         #append custom auth authorization
         CustomAuthUtility.appendCustomAuthParams(headers)
 
-        # Prepare and invoke the API call request to fetch the response
-        response = unirest.post(query_url, headers=headers)
+        def post_callback(response):
+            self.get_media_by_id(MediaResponse(**response.body).id)
 
-        # Error handling using HTTP status codes
-        if response.code < 200 or response.code > 206:  # 200 = HTTP OK
-            raise APIException("HTTP Response Not OK", response.code, response.body) 
-    
-        # Try to cast response to desired type
-        if isinstance(response.body, dict):
-            # Response is already in a dictionary, return the object 
-            return MediaResponse(**response.body)
-        
-        # If we got here then an error occured while trying to parse the response
-        raise APIException("Invalid JSON returned", response.code, response.body) 
+        # Prepare and invoke the API call request to fetch the response
+        unirest.timeout(5)
+        response = unirest.post(query_url, headers=headers, callback=post_callback)
+
 
     def get_media_by_id(self,
                         id):
@@ -98,6 +99,7 @@ class EmotionAnalysisController(object):
                 the request.
 
         """
+
         # The base uri for api requests
         query_builder = Configuration.BASE_URI
  
@@ -110,26 +112,27 @@ class EmotionAnalysisController(object):
         })
 
         # Validate and preprocess url
-        query_url = APIHelper.clean_url(query_builder)
-
-        # Prepare headers
-        headers = {
-
-            "Content-Type": Configuration.content_type,            "user-agent": "APIMATIC 2.0",
-            "accept": "application/json"
-        }
+        get_query_url = APIHelper.clean_url(query_builder)
 
         #append custom auth authorization
         CustomAuthUtility.appendCustomAuthParams(headers)
 
+        def get_callback(response):
+            try:
+                if response.body["status"] == "Complete":
+                    signal.alarm(0)
+                    print MediaByIdResponse(**response.body).frames
+            except:
+                print "Processing . . ."
+                time.sleep(2)
+                get_response()
+                
         # Prepare and invoke the API call request to fetch the response
-        response = unirest.get(query_url, headers=headers)
+        def get_response():
+            unirest.timeout(5)
+            thread = unirest.get(get_query_url, headers=headers, callback=get_callback)
 
-        # Error handling using HTTP status codes
-        if response.code < 200 or response.code > 206:  # 200 = HTTP OK
-            raise APIException("HTTP Response Not OK", response.code, response.body) 
-    
-        return response.body
+        get_response()
 
     def delete_media_by_id(self,
                            id):
@@ -164,18 +167,13 @@ class EmotionAnalysisController(object):
         # Validate and preprocess url
         query_url = APIHelper.clean_url(query_builder)
 
-        # Prepare headers
-        headers = {
-
-            "Content-Type": Configuration.content_type,            "user-agent": "APIMATIC 2.0",
-            "accept": "application/json"
-        }
-
         #append custom auth authorization
         CustomAuthUtility.appendCustomAuthParams(headers)
 
         # Prepare and invoke the API call request to fetch the response
         response = unirest.delete(query_url, headers=headers)
+
+        print ">>> delete response: ",response
 
         # Error handling using HTTP status codes
         if response.code < 200 or response.code > 206:  # 200 = HTTP OK

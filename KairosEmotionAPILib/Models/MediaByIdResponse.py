@@ -36,15 +36,17 @@ class MediaByIdResponse(object):
         
         """
         # Set all of the parameters to their default values
-        self.id = None
-        self.status_code = None
-        self.status_message = None
+        self.status = None
+        self.length = None
+        self.media_id = None
+        self.frames = None
 
         # Create a mapping from API property names to Model property names
         replace_names = {
-            "id": "id",
-            "status_code": "status_code",
-            "status_message": "status_message",
+            "status": "status",
+            "length": "length",
+            "media_id": "media_id",
+            "frames": "frames",
         }
 
         # Parse all of the Key-Value arguments
@@ -55,6 +57,7 @@ class MediaByIdResponse(object):
                     setattr(self, replace_names[key], kwargs[key])
 
     def resolve_names(self):
+
         """Creates a dictionary representation of this object.
         
         This method converts an object to a dictionary that represents the
@@ -68,9 +71,10 @@ class MediaByIdResponse(object):
         """
         # Create a mapping from Model property names to API property names
         replace_names = {
-            "id": "id",
-            "status_code": "status_code",
-            "status_message": "status_message",
+            "status": "status",
+            "length": "length",
+            "media_id": "media_id",
+            "frames": "frames",
         }
 
         retval = dict()
