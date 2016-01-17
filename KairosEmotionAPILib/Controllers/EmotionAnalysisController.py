@@ -121,6 +121,7 @@ class EmotionAnalysisController(object):
             try:
                 if response.body["status"] == "Complete":
                     signal.alarm(0)
+                    self.delete_media_by_id(id)
                     print MediaByIdResponse(**response.body).frames
             except:
                 print "Processing . . ."
@@ -173,14 +174,13 @@ class EmotionAnalysisController(object):
         # Prepare and invoke the API call request to fetch the response
         response = unirest.delete(query_url, headers=headers)
 
-        print ">>> delete response: ",response
-
         # Error handling using HTTP status codes
         if response.code < 200 or response.code > 206:  # 200 = HTTP OK
             raise APIException("HTTP Response Not OK", response.code, response.body) 
     
         # Try to cast response to desired type
         if isinstance(response.body, dict):
+            print "Media ID Deleted"
             # Response is already in a dictionary, return the object 
             return MediaByIdResponse(**response.body)
         
