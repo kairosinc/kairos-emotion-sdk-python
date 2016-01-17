@@ -32,9 +32,9 @@ It is also shown in [2].
     3. Create a new instance using 'controller = EmotionAnalysisController()'
     4. Invoke an endpoint with the appropriate parameters, for example
         'response = controller.create_media(<required parameters if any>)'
-    5. "response" will now be an object of type Media response.
-    6. To test the response you get, print out a property of "response",
-        for example 'print response.status_code'.
+    5. The process is asynchronous, so the response is not immediately available.
+       For testing, the response is printed when the second, asynchronous API 
+       "get" call is successful. 
 
 [1] PIP - https://pip.pypa.io
 
@@ -43,6 +43,4 @@ It is also shown in [2].
 	controller = EmotionAnalysisController()
     response = controller.create_media()
 
-    print response.status_code
-    #or you can print more information
-    print response.resolve_names()
+    
