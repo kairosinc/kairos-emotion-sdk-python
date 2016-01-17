@@ -15,11 +15,11 @@ class Configuration :
 
     # Application ID
     # TODO: Replace the app_id with an appropriate value
-    app_id = "7736975c"
+    app_id = ""
 
     # Application Key
     # TODO: Replace the app_key with an appropriate value
-    app_key = "7120d65a1779e0c235d5110c9fb8119a"
+    app_key = ""
 
     # set timeout in seconds for API processes
     api_timeout = 10
