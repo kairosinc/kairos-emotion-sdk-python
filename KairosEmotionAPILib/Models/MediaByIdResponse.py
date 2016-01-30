@@ -38,14 +38,14 @@ class MediaByIdResponse(object):
         # Set all of the parameters to their default values
         self.status = None
         self.length = None
-        self.media_id = None
+        self.id = None
         self.frames = None
 
         # Create a mapping from API property names to Model property names
         replace_names = {
             "status": "status",
             "length": "length",
-            "media_id": "media_id",
+            "id": "id",
             "frames": "frames",
         }
 
@@ -73,7 +73,7 @@ class MediaByIdResponse(object):
         replace_names = {
             "status": "status",
             "length": "length",
-            "media_id": "media_id",
+            "id": "id",
             "frames": "frames",
         }
 
