@@ -32,9 +32,7 @@ It is also shown in [2].
     3. Create a new instance using 'controller = EmotionAnalysisController()'
     4. Invoke an endpoint with the appropriate parameters, for example
         'response = controller.create_media(<required parameters if any>)'
-    5. The process is asynchronous, so the response is not immediately available.
-       For testing, the response is printed when the second, asynchronous API 
-       "get" call is successful. 
+ 
 
 [1] PIP - https://pip.pypa.io
 

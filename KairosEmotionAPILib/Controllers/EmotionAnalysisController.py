@@ -6,8 +6,6 @@
    This file was automatically generated for kairos by APIMATIC BETA v2.0 on 01/15/2016
 """
 import unirest
-import signal
-import time
 
 from KairosEmotionAPILib.APIHelper import APIHelper
 from KairosEmotionAPILib.Configuration import Configuration
